@@ -12,14 +12,17 @@
 #use fast_io(e)
 
 
-
-
 void main (void){
    setup_oscillator(OSC_16MHZ);
+   set_tris_b(0x00);
+   set_tris_d(0x00);
+   char dato[15];
+   signed long resultado = 0x00;
+   int contCaracter=0x00, flagValido = 0x00;
 
    while(1){
     
-}   
+    }   
 }
 
 
