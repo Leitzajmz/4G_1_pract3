@@ -13,7 +13,12 @@ void main (void){
    setup_oscillator(OSC_16MHZ);
 
    while(1){
-    
+      if(kbhit()){
+          dato[contCaracter]=getch();
+          printf("%c",dato[contCaracter]);
+          
+      } 
+       
 }   
 }
 
