@@ -48,7 +48,6 @@ void main (void){
                printf("\r");
                contCaracter = 0x00;
             }
-<<<<<<< HEAD
              contCaracter = 0x00;
          }  
          else
@@ -70,9 +69,4 @@ int validarCadena(char vect[], int cont){
          else
             return 0x00;
       }
-=======
-         }
-      } 
-   }
->>>>>>> cfe823155e86d7916427c6e86e57c62e4693b4ea
 }
