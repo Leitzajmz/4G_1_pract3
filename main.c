@@ -27,8 +27,16 @@ void main (void){
          printf("%c", dato[contCaracter]);
          if(dato[contCaracter] == 13){
             for(int i = 0 ; i < contCaracter; i++){
-               printf("%c", dato[contCaracter]);
-               printf("\r");
+               if((dato[i]>47 && dato[i]<58)||(dato[i]=='<'||dato[i]=='>')){
+                  printf("%c", dato[contCaracter]);
+                  printf("\r");
+                  contCaracter = 0x00;
+               }
+               else{
+                  printf("Cadena no valida");
+                  printf("\r");
+                  contCaracter = 0x00;
+               }
             }
             contCaracter = 0x00;
          }
