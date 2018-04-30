@@ -30,7 +30,10 @@ void main (void){
                printf("%c", dato[contCaracter]);
                printf("\r");
             }
+            contCaracter = 0x00;
          }
+         else
+            contCaracter++;
       } 
    }
 }
