@@ -72,6 +72,7 @@ int validarCadena(char vect[], int cont){
             return 0x00;
       }
 }
+
 int evaluarBackSpace(char vect[], int cont){
    if(vect[cont] == 8){
       return cont-2;
@@ -80,3 +81,4 @@ int evaluarBackSpace(char vect[], int cont){
       return cont;
    }
 }
+
