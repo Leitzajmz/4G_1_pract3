@@ -24,7 +24,13 @@ void main (void){
    while(1){
       if(kbhit()){
          dato[contCaracter] = getch(); 
-         printf("%c", dato[contCaracter]);  
+         printf("%c", dato[contCaracter]);
+         if(dato[contCaracter] == 13){
+            for(int i = 0 ; i < contCaracter; i++){
+               printf("%c", dato[contCaracter]);
+               printf("\r");
+            }
+         }
       } 
    }
 }
