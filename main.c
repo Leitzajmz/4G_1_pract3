@@ -5,6 +5,7 @@
 #fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG
 #use delay(clock=16000000)
 #use RS232(BAUD=9600,XMIT=PIN_C6,rcv=PIN_C7,BITS=8,PARITY=N,STOP=1)
+
 #use fast_io(a)
 #use fast_io(b)
 #use fast_io(c)
@@ -34,5 +35,3 @@ void main (void){
       } 
    }
 }
-
-
