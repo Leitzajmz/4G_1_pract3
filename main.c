@@ -5,6 +5,7 @@
 #fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG
 #use delay(clock=16000000)
 #use RS232(BAUD=9600,XMIT=PIN_C6,rcv=PIN_C7,BITS=8,PARITY=N,STOP=1)
+
 #use fast_io(a)
 #use fast_io(b)
 #use fast_io(c)
@@ -47,6 +48,7 @@ void main (void){
                printf("\r");
                contCaracter = 0x00;
             }
+<<<<<<< HEAD
              contCaracter = 0x00;
          }  
          else
@@ -68,4 +70,9 @@ int validarCadena(char vect[], int cont){
          else
             return 0x00;
       }
+=======
+         }
+      } 
+   }
+>>>>>>> cfe823155e86d7916427c6e86e57c62e4693b4ea
 }
