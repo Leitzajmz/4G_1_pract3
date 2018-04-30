@@ -13,6 +13,7 @@
 #use fast_io(e)
 
 int validarCadena(char vect[], int cont);
+int evaluarBackSpace(char vect[], int cont);
 
 void main (void){
    setup_oscillator(OSC_16MHZ);
@@ -27,6 +28,7 @@ void main (void){
       if(kbhit()){
          dato[contCaracter] = getch(); 
          printf("%c", dato[contCaracter]);
+         evaluarBackSpace(dato,contCaracter);
          if(dato[contCaracter] == 13){
             if(dato[0] == '<' && dato[contCaracter-1] == '>'){
                flagValido = (dato, contCaracter);
@@ -48,7 +50,6 @@ void main (void){
                printf("\r");
                contCaracter = 0x00;
             }
-<<<<<<< HEAD
              contCaracter = 0x00;
          }  
          else
@@ -70,9 +71,12 @@ int validarCadena(char vect[], int cont){
          else
             return 0x00;
       }
-=======
-         }
-      } 
+}
+int evaluarBackSpace(char vect[], int cont){
+   if(vect[cont] == 8){
+      return cont-2;
    }
->>>>>>> cfe823155e86d7916427c6e86e57c62e4693b4ea
+   else{
+      return cont;
+   }
 }
