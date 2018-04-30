@@ -82,3 +82,9 @@ int evaluarBackSpace(char vect[], int cont){
    }
 }
 
+void mostrarDatos(char vect[],int tam){
+   for(int i = 0; i < tam; i++){
+      printf("%c",vect[i]);
+      printf("\r");                       
+   }
+}
