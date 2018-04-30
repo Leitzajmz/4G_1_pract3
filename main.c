@@ -11,6 +11,7 @@
 #use fast_io(d)
 #use fast_io(e)
 
+int validarCadena(char vect[], int cont);
 
 void main (void){
    setup_oscillator(OSC_16MHZ);
@@ -26,24 +27,45 @@ void main (void){
          dato[contCaracter] = getch(); 
          printf("%c", dato[contCaracter]);
          if(dato[contCaracter] == 13){
-            for(int i = 0 ; i < contCaracter; i++){
-               if((dato[i]>47 && dato[i]<58)||(dato[i]=='<'||dato[i]=='>')){
-                  printf("%c", dato[contCaracter]);
-                  printf("\r");
-                  contCaracter = 0x00;
-               }
-               else{
-                  printf("Cadena no valida");
-                  printf("\r");
-                  contCaracter = 0x00;
-               }
+            if(dato[0] == '<' && dato[contCaracter-1] == '>'){
+               flagValido = (dato, contCaracter);
+                  if(flagValido == 0x01){
+                     for (int i = 0; i<contCaracter; i++){
+                        printf("%c", dato[contCaracter]);
+                        printf("\r");
+                        contCaracter = 0x00;
+                     }
+                  }
+                  else{
+                     printf("Cadena no valida");
+                     printf("\r");
+                     contCaracter = 0x00;
+                  }
             }
-            contCaracter = 0x00;
-         }
+            else{
+               printf("Valores no validos");
+               printf("\r");
+               contCaracter = 0x00;
+            }
+             contCaracter = 0x00;
+         }  
          else
             contCaracter++;
-      } 
-   }
+      }
+   } 
 }
 
 
+int validarCadena(char vect[], int cont){
+   int contValido = 0x00;
+      for(int i = 1; i < cont-1; i++){
+         if(vect[i] > 41 && vect[i] < 58){
+            contValido++;
+            if (contValido == cont-2){
+               return 0x01;
+            }
+         }
+         else
+            return 0x00;
+      }
+}
