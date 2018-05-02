@@ -15,6 +15,8 @@
 int validarCadena(char vect[], int cont);
 int evaluarBackSpace(char vect[], int cont);
 void operandos(char vect[],int cont );
+long operacion(char vect[], int cont);
+void rutinaDeError();
 
 int numero[3];
 int num1, num2;
@@ -85,7 +87,42 @@ int evaluarBackSpace(char vect[], int cont){
       return cont;
    }
 }
-void operandos(char vect[],int cont ){
+
+long operacion(char vect[], int cont){
+   switch(vect[cont-2]){
+   case '+':
+      return (long)num1 + (long)num2;
+      break;
+   case '-':
+      return (long)num1 - (long)num2;
+      break;
+   case '*':
+      return (long)num1 * (long)num2;
+      break;
+   case '/':
+      if(num2 == 0){
+         printf("Operacion no valida");
+         printf("\r");
+         rutinaDeError();
+      }
+      else
+         return (long)num1 / (long)num2;
+      break;
+   }
+}
+
+void rutinaDeError(){
+   for(int i = 0 ; i < 3 ; i++){
+      output_b(0xFF);
+      output_d(0xFF);
+      delay_ms(50);
+      output_b(0x00);
+      output_d(0x00);
+      delay_ms(50);
+   }
+  }
+  
+  void operandos(char vect[],int cont ){
    int contNumero = 0x00, contDigitos = 0x00;
    for(int i = 1; i < cont-1; i++){
       switch(vect[i]){
@@ -111,4 +148,3 @@ void operandos(char vect[],int cont ){
          break;
       }
    }  
-}
