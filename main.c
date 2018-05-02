@@ -88,6 +88,13 @@ int evaluarBackSpace(char vect[], int cont){
    }
 }
 
+void mostrarDatos(char vect[],int tam){
+   for(int i = 0; i < tam; i++){
+      printf("%c",vect[i]);
+      printf("\r");                       
+   }
+}
+
 long operacion(char vect[], int cont){
    switch(vect[cont-2]){
    case '+':
@@ -148,3 +155,4 @@ void rutinaDeError(){
          break;
       }
    }  
+
