@@ -17,8 +17,8 @@ void main (void){
    setup_oscillator(OSC_16MHZ);
    set_tris_b(0x00);
    set_tris_d(0x00);
-   int flagDato = 0x00;
-   char dato;
+   int flagDato = 0x00, contCaracter = 0x00;
+   char dato[13];
    printf("Hola \n\r");
    
    while(1){
@@ -26,8 +26,19 @@ void main (void){
          flagDato = 0x01;
       }
       if(flagDato == 0x01){
-         output_b(0x01);
+         dato[contCaracter] = getch();           
+         contCaracter++; 
          flagDato = 0x00;
+      } 
+      if (dato[contCaracter-1] == '>'){
+         printf("\n\r");
+         printf("Fin de la cadena");
+         printf("\n\r");
+         for(int i = 0; i < contCaracter; i++){
+            printf("%c", dato[i]);
+         }
+          printf("\n\r");
+         contCaracter = 0x00;
       }    
    }
 }
