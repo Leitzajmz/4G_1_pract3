@@ -15,13 +15,15 @@
 int validarCadena(char vect[], int tam);
 void operandos(char vect[], int tam);
 
-int num1, num2;
+unsigned int num1, num2;
+
 void main (void){
    setup_oscillator(OSC_16MHZ);
    set_tris_b(0x00);
    set_tris_d(0x00);
    int flagDato = 0x00, contCaracter = 0x00, flagValido = 0x00;
    char dato[13];
+   signed long resultado = 0x00;
    printf("Hola \n\r");
    
    while(1){
@@ -40,11 +42,10 @@ void main (void){
          if (flagValido == 0x01){
             printf("\n\r Datos ingresados validos \n\r");
             operandos(dato, contCaracter);
-            /*printf("%lx",num1);
-            printf("\n\r");
-            printf("%lx",num2);
-            printf("\n\r");*/
-
+            resultado = (long)num1 * (long)num2;
+            printf("El resultado es : %lx", resultado);
+            output_b(resultado);
+            output_d(resultado>>8);
             contCaracter = 0x00;
             flagValido = 0x00;
          }
@@ -84,48 +85,35 @@ void operandos(char vect[], int tam){
       contAux++;
       if(num[contAux-1] == ','){
          switch(contAux){
+         case 4:
+            num[2] = num[2];
+            num[1] = num[1];
+            num[0] = num[0];
+            num[3] = NULL;
+            contAux = 0x00;
+            contDigitos++;
+            break;
          case 3:
             num[2] = num[1];
             num[1] = num[0];
-            num[0] = 0x00;
-            //num[3] = NULL;
-            break;
-         }
-         num1 = atoi(num);
-         printf("%lx", num1);
-         /*for(int i = 0; i < 3 ; i++){
-            printf("%c", num[i]);
-            printf("  \n\r");
-         }*/
-
-      }
-   }
-}
-/*      if(vect[i] == ','){
-         switch(contAux){
-         case 1:
+            num[0] = '0';
             num[3] = NULL;
-            num[2] = num[0];
-            num[1] = 0x00;
-            num[0] = 0x00;
             contAux = 0x00;
             contDigitos++;
             break;
          case 2:
+            num[2] = num[0];
+            num[1] = '0';
+            num[0] = '0';
             num[3] = NULL;
-            num[2] = num[1];
-            num[1] = num[0];
-            num[0] = 0x00;
-            contAux = 0x00;
-            contDigitos++;
-            break;
-         case 3:
             contAux = 0x00;
             contDigitos++;
             break;
          }
          if(contDigitos == 1){
             num1 = atoi(num);
+           printf("%lx", num1);
+            printf("\n\r");
             num[3] = NULL;
             num[2] = NULL;
             num[1] = NULL;
@@ -133,9 +121,13 @@ void operandos(char vect[], int tam){
          }
          else if(contDigitos == 2){
             num2 = atoi(num);
+            printf("%lx", num2);
+            printf("\n\r");         
             num[3] = NULL;
             num[2] = NULL;
             num[1] = NULL;
             num[0] = NULL;
-         }
-      }   */
+         }  
+      }
+   }
+}
