@@ -44,11 +44,12 @@ void main (void){
          if (flagValido == 0x01){
             printf("\n\r Datos ingresados validos \n\r");
             operandos(dato, contCaracter);
-            printf("%lx", num1);
+            printf("Primer numero : %lx", num1);
             printf("\n\r");            
-            printf("%lx", num2);
+            printf("Segundo numero: %lx", num2);
             printf("\n\r");
-            resultado = (long)num1 + (long)num2;
+            resultado = operacion(dato,contCaracter);
+            //resultado = (long)num1 + (long)num2;
             printf("El resultado es : %ld", resultado);
             printf("\n\r");
             output_b(resultado);
@@ -138,7 +139,7 @@ void operandos(char vect[], int tam){
    }
 }
 
-/*long operacion(char vect[], int cont){
+long operacion(char vect[], int cont){
    switch(vect[cont-2]){
    case '+':
       return (long)num1 + (long)num2;
@@ -153,11 +154,11 @@ void operandos(char vect[], int tam){
       if(num2 == 0){
          printf("Operacion no valida");
          printf("\n\r");
-         rutinaDeError();
+         //rutinaDeError();
       }
       else
          return (long)num1 / (long)num2;
       break;
    }
-}*/
+}
 
