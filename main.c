@@ -18,7 +18,6 @@ void operandos(char vect[],int cont );
 long operacion(char vect[], int cont);
 void rutinaDeError();
 
-int numero[3];
 int num1, num2;
 
 void main (void){
@@ -28,32 +27,54 @@ void main (void){
    char dato[15];
    signed long resultado = 0x00;
    int contCaracter = 0x00, flagValido = 0x00;
-   printf("Hola");
-   printf("\r");
+   
+   printf("Ingresa los datos en el siguiente formato :");
+   printf("\n\r");
+   printf("<xxx,xxx,operacion>");
+   printf("\n\r");
+   
    while(1){
       if(kbhit()){
          dato[contCaracter] = getch(); 
          printf("%c", dato[contCaracter]);
-         evaluarBackSpace(dato,contCaracter);
+         contCaracter = evaluarBackSpace(dato,contCaracter);
+         
          if(dato[contCaracter] == 13){
             if(dato[0] == '<' && dato[contCaracter-1] == '>'){
                flagValido = (dato, contCaracter);
                   if(flagValido == 0x01){
                      for (int i = 0; i<contCaracter; i++){
                         printf("%c", dato[contCaracter]);
-                        printf("\r");
+                        printf("\n");
                         contCaracter = 0x00;
                      }
+                     operandos(dato, contCaracter);
+                        if(num1 < 0x100 && num2 < 0x100){
+                           resultado = operacion(dato, contCaracter);
+                           output_b(resultado);
+                           output_d(resultado>>8);
+                           printf("El resultado es: %ld",resultado);
+                           printf("\n\r");
+                           resultado = 0x00;
+                           contCaracter = 0x00;
+                        }
+                        else{
+                           printf("Valores fuera de rango");
+                           printf("\n\r"); 
+                           rutinaDeError();
+                           resultado = 0x00;
+                           contCaracter = 0x00;
+                           }
                   }
                   else{
                      printf("Cadena no valida");
-                     printf("\r");
+                     printf("\n");
                      contCaracter = 0x00;
                   }
             }
             else{
                printf("Valores no validos");
-               printf("\r");
+               printf("\n");
                contCaracter = 0x00;
             }
              contCaracter = 0x00;
@@ -91,7 +112,7 @@ int evaluarBackSpace(char vect[], int cont){
 void mostrarDatos(char vect[],int tam){
    for(int i = 0; i < tam; i++){
       printf("%c",vect[i]);
-      printf("\r");                       
+      printf("\n");                       
    }
 }
 
@@ -109,7 +130,7 @@ long operacion(char vect[], int cont){
    case '/':
       if(num2 == 0){
          printf("Operacion no valida");
-         printf("\r");
+         printf("\n");
          rutinaDeError();
       }
       else
@@ -131,6 +152,7 @@ void rutinaDeError(){
   
   void operandos(char vect[],int cont ){
    int contNumero = 0x00, contDigitos = 0x00;
+   int numero[4];
    for(int i = 1; i < cont-1; i++){
       switch(vect[i]){
       case ',':
@@ -138,6 +160,7 @@ void rutinaDeError(){
          numero[0] = vect[i-3];
          numero[1] = vect[i-2];
          numero[2] = vect[i-1];  
+         numero[3] = NULL;
          contNumero++;
          
          if (contNumero == 1){
