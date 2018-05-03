@@ -17,6 +17,18 @@ void main (void){
    setup_oscillator(OSC_16MHZ);
    set_tris_b(0x00);
    set_tris_d(0x00);
+   int flagDato = 0x00;
+   char dato;
+   printf("Hola \n\r");
    
-  }
+   while(1){
+      if(kbhit()){
+         flagDato = 0x01;
+      }
+      if(flagDato == 0x01){
+         output_b(0x01);
+         flagDato = 0x00;
+      }    
+   }
+}
 
