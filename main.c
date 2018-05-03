@@ -14,6 +14,7 @@
 
 int validarCadena(char vect[], int tam);
 void operandos(char vect[], int tam);
+long operacion(char vect[], int cont);
 
 unsigned int num1, num2;
 
@@ -21,6 +22,7 @@ void main (void){
    setup_oscillator(OSC_16MHZ);
    set_tris_b(0x00);
    set_tris_d(0x00);
+   
    int flagDato = 0x00, contCaracter = 0x00, flagValido = 0x00;
    char dato[13];
    signed long resultado = 0x00;
@@ -42,8 +44,13 @@ void main (void){
          if (flagValido == 0x01){
             printf("\n\r Datos ingresados validos \n\r");
             operandos(dato, contCaracter);
-            resultado = (long)num1 * (long)num2;
-            printf("El resultado es : %lx", resultado);
+            printf("%lx", num1);
+            printf("\n\r");            
+            printf("%lx", num2);
+            printf("\n\r");
+            resultado = (long)num1 + (long)num2;
+            printf("El resultado es : %ld", resultado);
+            printf("\n\r");
             output_b(resultado);
             output_d(resultado>>8);
             contCaracter = 0x00;
@@ -77,9 +84,8 @@ int validarCadena(char vect[], int tam){
 }
 
 void operandos(char vect[], int tam){
-   int contAux = 0x00,num[3], contDigitos = 0x00;
-
-   
+   int contAux = 0x00,num[4], contDigitos = 0x00;
+  
    for(int i = 1; i < tam-1; i++){
       num[contAux] = vect[i];
       contAux++;
@@ -112,8 +118,8 @@ void operandos(char vect[], int tam){
          }
          if(contDigitos == 1){
             num1 = atoi(num);
-           printf("%lx", num1);
-            printf("\n\r");
+            /*printf("%lx", num1);
+            printf("\n\r");*/ 
             num[3] = NULL;
             num[2] = NULL;
             num[1] = NULL;
@@ -121,13 +127,37 @@ void operandos(char vect[], int tam){
          }
          else if(contDigitos == 2){
             num2 = atoi(num);
-            printf("%lx", num2);
-            printf("\n\r");         
+            /*printf("%lx", num2);
+            printf("\n\r"); */
             num[3] = NULL;
             num[2] = NULL;
             num[1] = NULL;
             num[0] = NULL;
-         }  
+         }
       }
    }
 }
+
+/*long operacion(char vect[], int cont){
+   switch(vect[cont-2]){
+   case '+':
+      return (long)num1 + (long)num2;
+      break;
+   case '-':
+      return (long)num1 - (long)num2;
+      break;
+   case '*':
+      return (long)num1 * (long)num2;
+      break;
+   case '/':
+      if(num2 == 0){
+         printf("Operacion no valida");
+         printf("\n\r");
+         rutinaDeError();
+      }
+      else
+         return (long)num1 / (long)num2;
+      break;
+   }
+}*/
+
