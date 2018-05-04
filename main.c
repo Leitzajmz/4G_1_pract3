@@ -30,15 +30,10 @@ void main (void){
    
    while(1){
       if(kbhit()){
-         flagDato = 0x01;
-      }
-      
-      if(flagDato == 0x01){
          dato[contCaracter] = getch();           
          contCaracter++; 
-         flagDato = 0x00;
-      } 
-      
+      }
+
       if (dato[contCaracter-1] == '>'){
          flagValido = validarCadena(dato, contCaracter);
          if (flagValido == 0x01){
