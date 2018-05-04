@@ -28,7 +28,7 @@ void main (void){
    int flagDato = 0x00, contCaracter = 0x00, flagValido = 0x00;
    char dato[13];
    int32 resultado = 0x00;
-   printf("Hola \n\r");
+   printf("Hola \n\r"); //Cambiar mensaje de bienvenida
    
    while(1){
       if(kbhit()){
@@ -162,4 +162,3 @@ int32 operacion(char vect[], int cont){
 //rutinaDeError
 
 //backSpace
-
