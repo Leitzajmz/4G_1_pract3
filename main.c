@@ -12,25 +12,26 @@
 #use fast_io(d)
 #use fast_io(e)
 
+void mostrarDatos(char vect[],int tam);
 int validarCadena(char vect[], int cont);
 int evaluarBackSpace(char vect[], int cont);
 void operandos(char vect[],int cont );
-long operacion(char vect[], int cont);
+int32 operacion(char vect[], int cont);
 void rutinaDeError();
 
-int num1, num2;
+unsigned int num1, num2;
 
 void main (void){
    setup_oscillator(OSC_16MHZ);
    set_tris_b(0x00);
    set_tris_d(0x00);
    char dato[15];
-   signed long resultado = 0x00;
+   int32 resultado = 0x00;
    int contCaracter = 0x00, flagValido = 0x00;
    
    printf("Ingresa los datos en el siguiente formato :");
    printf("\n\r");
-   printf("<xxx,xxx,operacion>");
+   printf("<xxx,yyy,operacion>");
    printf("\n\r");
    
    while(1){
@@ -42,35 +43,31 @@ void main (void){
          if(dato[contCaracter] == 13){
             if(dato[0] == '<' && dato[contCaracter-1] == '>'){
                flagValido = (dato, contCaracter);
-                  if(flagValido == 0x01){
-                     for (int i = 0; i<contCaracter; i++){
-                        printf("%c", dato[contCaracter]);
-                        printf("\n");
-                        contCaracter = 0x00;
-                     }
-                     operandos(dato, contCaracter);
-                        if(num1 < 0x100 && num2 < 0x100){
-                           resultado = operacion(dato, contCaracter);
-                           output_b(resultado);
-                           output_d(resultado>>8);
-                           printf("El resultado es: %ld",resultado);
-                           printf("\n\r");
-                           resultado = 0x00;
-                           contCaracter = 0x00;
-                        }
-                        else{
-                           printf("Valores fuera de rango");
-                           printf("\n\r"); 
-                           rutinaDeError();
-                           resultado = 0x00;
-                           contCaracter = 0x00;
-                           }
-                  }
-                  else{
-                     printf("Cadena no valida");
-                     printf("\n");
+               if(flagValido == 0x01){
+                  mostrarDatos(dato,contCaracter);
+                  operandos(dato, contCaracter);
+                  if(num1 < 0x100 && num2 < 0x100){
+                     resultado = operacion(dato, contCaracter);
+                     output_b(resultado);
+                     output_d(resultado>>8);
+                     printf("El resultado es: %ld",resultado);
+                     printf("\n\r");
+                     resultado = 0x00;
                      contCaracter = 0x00;
                   }
+                  else{
+                     printf("Valores fuera de rango");
+                     printf("\n\r"); 
+                     rutinaDeError();
+                     resultado = 0x00;
+                     contCaracter = 0x00;
+                  }
+               }
+               else{
+                  printf("Cadena no valida");
+                  printf("\n");
+                  contCaracter = 0x00;
+               }
             }
             else{
                printf("Valores no validos");
@@ -86,18 +83,25 @@ void main (void){
 }
 
 
+void mostrarDatos(char vect[],int tam){
+   for(int i = 0; i < tam; i++){
+      printf("%c",vect[i]);
+      printf("\n\r");                       
+   }
+}
+
 int validarCadena(char vect[], int cont){
    int contValido = 0x00;
-      for(int i = 1; i < cont-1; i++){
-         if(vect[i] > 41 && vect[i] < 58){
-            contValido++;
-            if (contValido == cont-2){
-               return 0x01;
-            }
+   for(int i = 1; i < cont-1; i++){
+      if(vect[i] > 41 && vect[i] < 58){
+         contValido++;
+         if (contValido == cont-2){
+            return 0x01;
          }
-         else
-            return 0x00;
       }
+      else
+         return 0x00;
+   }
 }
 
 int evaluarBackSpace(char vect[], int cont){
@@ -109,23 +113,16 @@ int evaluarBackSpace(char vect[], int cont){
    }
 }
 
-void mostrarDatos(char vect[],int tam){
-   for(int i = 0; i < tam; i++){
-      printf("%c",vect[i]);
-      printf("\n");                       
-   }
-}
-
-long operacion(char vect[], int cont){
+int32 operacion(char vect[], int cont){
    switch(vect[cont-2]){
    case '+':
-      return (long)num1 + (long)num2;
+      return (int32)num1 + (int32)num2;
       break;
    case '-':
-      return (long)num1 - (long)num2;
+      return (int32)num1 - (int32)num2;
       break;
    case '*':
-      return (long)num1 * (long)num2;
+      return (int32)num1 * (int32)num2;
       break;
    case '/':
       if(num2 == 0){
@@ -134,7 +131,7 @@ long operacion(char vect[], int cont){
          rutinaDeError();
       }
       else
-         return (long)num1 / (long)num2;
+         return (int32)num1 / (int32)num2;
       break;
    }
 }
@@ -150,32 +147,57 @@ void rutinaDeError(){
    }
   }
   
-  void operandos(char vect[],int cont ){
-   int contNumero = 0x00, contDigitos = 0x00;
-   int numero[4];
-   for(int i = 1; i < cont-1; i++){
-      switch(vect[i]){
-      case ',':
-         
-         numero[0] = vect[i-3];
-         numero[1] = vect[i-2];
-         numero[2] = vect[i-1];  
-         numero[3] = NULL;
-         contNumero++;
-         
-         if (contNumero == 1){
-            num1 = atoi(numero);
-            numero[0] = NULL;
-            numero[1] = NULL;
-            numero[2] = NULL;
+void operandos(char vect[], int tam){
+   int contAux = 0x00,num[4], contDigitos = 0x00;
+  
+   for(int i = 1; i < tam-1; i++){
+      num[contAux] = vect[i];
+      contAux++;
+      if(num[contAux-1] == ','){
+         switch(contAux){
+         case 4:
+            num[2] = num[2];
+            num[1] = num[1];
+            num[0] = num[0];
+            num[3] = NULL;
+            contAux = 0x00;
+            contDigitos++;
+            break;
+         case 3:
+            num[2] = num[1];
+            num[1] = num[0];
+            num[0] = '0';
+            num[3] = NULL;
+            contAux = 0x00;
+            contDigitos++;
+            break;
+         case 2:
+            num[2] = num[0];
+            num[1] = '0';
+            num[0] = '0';
+            num[3] = NULL;
+            contAux = 0x00;
+            contDigitos++;
+            break;
          }
-         else if(contNumero == 2){
-            num2 = atoi(numero);
-            numero[0] = NULL;
-            numero[1] = NULL;
-            numero[2] = NULL;
-         } 
-         break;
+         if(contDigitos == 1){
+            num1 = atoi(num);
+            /*printf("%lx", num1);
+            printf("\n\r");*/ 
+            num[3] = NULL;
+            num[2] = NULL;
+            num[1] = NULL;
+            num[0] = NULL;
+         }
+         else if(contDigitos == 2){
+            num2 = atoi(num);
+            /*printf("%lx", num2);
+            printf("\n\r"); */
+            num[3] = NULL;
+            num[2] = NULL;
+            num[1] = NULL;
+            num[0] = NULL;
+         }
       }
-   } 
-  }
+   }
+}
