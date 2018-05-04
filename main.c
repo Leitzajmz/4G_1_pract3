@@ -12,111 +12,130 @@
 #use fast_io(d)
 #use fast_io(e)
 
-int validarCadena(char vect[], int cont);
-int evaluarBackSpace(char vect[], int cont);
-void operandos(char vect[],int cont );
-long operacion(char vect[], int cont);
-void rutinaDeError();
+int validarCadena(char vect[], int tam);
+void operandos(char vect[], int tam);
+int32 operacion(char vect[], int cont);
+//rutinaDeError
+//backSpace
 
-int num1, num2;
+unsigned int num1, num2;
 
 void main (void){
    setup_oscillator(OSC_16MHZ);
    set_tris_b(0x00);
    set_tris_d(0x00);
-   char dato[15];
-   signed long resultado = 0x00;
-   int contCaracter = 0x00, flagValido = 0x00;
    
-   printf("Ingresa los datos en el siguiente formato :");
-   printf("\n\r");
-   printf("<xxx,xxx,operacion>");
-   printf("\n\r");
+   int flagDato = 0x00, contCaracter = 0x00, flagValido = 0x00;
+   char dato[13];
+   int32 resultado = 0x00;
+   printf("Hola \n\r"); //Cambiar mensaje de bienvenida
    
    while(1){
       if(kbhit()){
-         dato[contCaracter] = getch(); 
-         printf("%c", dato[contCaracter]);
-         contCaracter = evaluarBackSpace(dato,contCaracter);
-         
-         if(dato[contCaracter] == 13){
-            if(dato[0] == '<' && dato[contCaracter-1] == '>'){
-               flagValido = (dato, contCaracter);
-                  if(flagValido == 0x01){
-                     for (int i = 0; i<contCaracter; i++){
-                        printf("%c", dato[contCaracter]);
-                        printf("\n");
-                        contCaracter = 0x00;
-                     }
-                     operandos(dato, contCaracter);
-                        if(num1 < 0x100 && num2 < 0x100){
-                           resultado = operacion(dato, contCaracter);
-                           output_b(resultado);
-                           output_d(resultado>>8);
-                           printf("El resultado es: %ld",resultado);
-                           printf("\n\r");
-                           resultado = 0x00;
-                           contCaracter = 0x00;
-                        }
-                        else{
-                           printf("Valores fuera de rango");
-                           printf("\n\r"); 
-                           rutinaDeError();
-                           resultado = 0x00;
-                           contCaracter = 0x00;
-                           }
-                  }
-                  else{
-                     printf("Cadena no valida");
-                     printf("\n");
-                     contCaracter = 0x00;
-                  }
-            }
-            else{
-               printf("Valores no validos");
-               printf("\n");
-               contCaracter = 0x00;
-            }
-             contCaracter = 0x00;
-         }  
-         else
-            contCaracter++;
+         dato[contCaracter] = getch();           
+         contCaracter++; 
       }
-   } 
-}
-
-
-int validarCadena(char vect[], int cont){
-   int contValido = 0x00;
-      for(int i = 1; i < cont-1; i++){
-         if(vect[i] > 41 && vect[i] < 58){
-            contValido++;
-            if (contValido == cont-2){
-               return 0x01;
-            }
+      //contCaracter = backSpace();
+      if (dato[contCaracter-1] == '>'){
+         flagValido = validarCadena(dato, contCaracter);
+         if (flagValido == 0x01){
+            operandos(dato, contCaracter);
+            printf("\n\r Datos ingresados validos \n\r");
+            printf("Primer numero : %lx", num1);
+            printf("\n\r");            
+            printf("Segundo numero: %lx", num2);
+            printf("\n\r");
+            resultado = operacion(dato,contCaracter);
+            printf("El resultado es : %ld", resultado);
+            printf("\n\r");
+            output_b(resultado);
+            output_d(resultado>>8);
+            contCaracter = 0x00;
+            flagValido = 0x00;
+            num1 = 0x00;
+            num2 = 0x00;
+            resultado = 0x00;
          }
-         else
-            return 0x00;
+         else{
+            printf("\n\r Datos ingresados no validos \n\r");
+            //rutinaDeError();
+            contCaracter = 0x00;
+         } 
+      }   
+   }
+}
+
+
+
+int validarCadena(char vect[], int tam){
+   int contValido = 0x00;
+   
+   if(vect[0] == '<' && tam > 6){
+      for(int i = 1; i < tam-1; i++){
+         if(vect[i] > 41 && vect[i] < 58)
+            contValido++;
       }
+      if (contValido == tam-2)
+         return 0x01;
+      else 
+         return 0x00;
+   }
+   else
+      return 0x00; 
 }
 
-int evaluarBackSpace(char vect[], int cont){
-   if(vect[cont] == 8){
-      return cont-2;
-   }
-   else{
-      return cont;
+void operandos(char vect[], int tam){
+   int contAux = 0x00,num[4], contDigitos = 0x00;
+  
+   for(int i = 1; i < tam-1; i++){
+      num[contAux] = vect[i];
+      contAux++;
+      if(num[contAux-1] == ','){
+         switch(contAux){
+         case 4:
+            num[2] = num[2];
+            num[1] = num[1];
+            num[0] = num[0];
+            num[3] = NULL;
+            contAux = 0x00;
+            contDigitos++;
+            break;
+         case 3:
+            num[2] = num[1];
+            num[1] = num[0];
+            num[0] = '0';
+            num[3] = NULL;
+            contAux = 0x00;
+            contDigitos++;
+            break;
+         case 2:
+            num[2] = num[0];
+            num[1] = '0';
+            num[0] = '0';
+            num[3] = NULL;
+            contAux = 0x00;
+            contDigitos++;
+            break;
+         }
+         if(contDigitos == 1){
+            num1 = atoi(num);
+            num[3] = NULL;
+            num[2] = NULL;
+            num[1] = NULL;
+            num[0] = NULL;
+         }
+         else if(contDigitos == 2){
+            num2 = atoi(num);
+            num[3] = NULL;
+            num[2] = NULL;
+            num[1] = NULL;
+            num[0] = NULL;
+         }
+      }
    }
 }
 
-void mostrarDatos(char vect[],int tam){
-   for(int i = 0; i < tam; i++){
-      printf("%c",vect[i]);
-      printf("\n");                       
-   }
-}
-
-long operacion(char vect[], int cont){
+int32 operacion(char vect[], int cont){
    switch(vect[cont-2]){
    case '+':
       return (long)num1 + (long)num2;
@@ -125,13 +144,14 @@ long operacion(char vect[], int cont){
       return (long)num1 - (long)num2;
       break;
    case '*':
-      return (long)num1 * (long)num2;
+      return (int32)num1 * (int32)num2;
       break;
    case '/':
       if(num2 == 0){
          printf("Operacion no valida");
-         printf("\n");
-         rutinaDeError();
+         printf("\n\r");
+         return 0x00;
+         //rutinaDeError();
       }
       else
          return (long)num1 / (long)num2;
@@ -139,43 +159,6 @@ long operacion(char vect[], int cont){
    }
 }
 
-void rutinaDeError(){
-   for(int i = 0 ; i < 3 ; i++){
-      output_b(0xFF);
-      output_d(0xFF);
-      delay_ms(50);
-      output_b(0x00);
-      output_d(0x00);
-      delay_ms(50);
-   }
-  }
-  
-  void operandos(char vect[],int cont ){
-   int contNumero = 0x00, contDigitos = 0x00;
-   int numero[4];
-   for(int i = 1; i < cont-1; i++){
-      switch(vect[i]){
-      case ',':
-         
-         numero[0] = vect[i-3];
-         numero[1] = vect[i-2];
-         numero[2] = vect[i-1];  
-         numero[3] = NULL;
-         contNumero++;
-         
-         if (contNumero == 1){
-            num1 = atoi(numero);
-            numero[0] = NULL;
-            numero[1] = NULL;
-            numero[2] = NULL;
-         }
-         else if(contNumero == 2){
-            num2 = atoi(numero);
-            numero[0] = NULL;
-            numero[1] = NULL;
-            numero[2] = NULL;
-         } 
-         break;
-      }
-   } 
-  }
+//rutinaDeError
+
+//backSpace
