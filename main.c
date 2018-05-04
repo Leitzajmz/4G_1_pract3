@@ -16,7 +16,6 @@
 int validarCadena(char vect[], int tam);
 void operandos(char vect[], int tam);
 int32 operacion(char vect[], int cont);
-int evaluarBackSpace(char vect[], int cont);
 void rutinaDeError();
 
 
@@ -40,9 +39,7 @@ void main (void){
       if(kbhit()){
          dato[contCaracter] = getch();           
          contCaracter++; 
-      }
-      contCaracter = evaluarBackSpace(dato,contCaracter);
-      
+      }      
       if (dato[contCaracter-1] == '>'){
          flagValido = validarCadena(dato, contCaracter);
          if (flagValido == 0x01){
@@ -69,30 +66,6 @@ void main (void){
             contCaracter = 0x00;
          } 
       }   
-   }
-}
-
-
-int validarCadena(char vect[], int cont){
-   int contValido = 0x00;
-   for(int i = 1; i < cont-1; i++){
-      if(vect[i] > 41 && vect[i] < 58){
-         contValido++;
-         if (contValido == cont-2){
-            return 0x01;
-         }
-      }
-      else
-         return 0x00;
-   }
-}
-
-int evaluarBackSpace(char vect[], int cont){
-   if(vect[cont] == 8){
-      return cont-2;
-   }
-   else{
-      return cont;
    }
 }
 
